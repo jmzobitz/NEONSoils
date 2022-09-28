@@ -26,6 +26,11 @@ compute_surface_flux <- function(input_data) {
     slice(1:3) %>%
     mutate(zOffset = abs(zOffset))  # Make these positive, just to avoid problems down the road.
 
+  # Soil co2 grad check
+  if(input_data_rev$co2mol[1] > input_data_rev$co2mol[2] | input_data_rev$co2mol[2] > input_data_rev$co2mol[3] | input_data_rev$co2mol[1] > input_data_rev$co2mol[3]){
+    return(NA) #if sensors are in the wrong order return NA
+  }
+
   # Calculate diffusivity of the first two levels as harmonic mean
   diffusive_mean <- c( (sum(input_data_rev$diffus[1:2]^(-1))/2)^(-1), (sum(input_data_rev$diffus[2:3]^(-1))/2)^(-1) )
 

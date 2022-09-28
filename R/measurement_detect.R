@@ -39,7 +39,7 @@ measurement_detect <- function(input_data) {
   # Can we interpolate data?
   have_interpolate <- nested_data %>%
     mutate(tot = map_dbl(data, nrow)) %>%  # count measurement totals
-    filter((if_else(measurement == 'co2',tot>2,tot>=2))) %>%  # Filter out the measurements
+    filter((if_else(measurement == 'co2',tot>2,tot>=1))) %>%  # Filter out the measurements
     select(-tot)
 
   # Do we have three different measurements (co2, pressure, temp) to compute flux?

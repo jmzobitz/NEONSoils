@@ -50,8 +50,11 @@ compute_neon_flux <- function(input_file_name) {
     mutate(measurement = "co2") %>%
     rename(value = soilCO2concentrationMean)
 
+
   # Bind these all up together
   site <- rbind(soil_water,temperature,co2)
+
+
 
   # Get the sensor positions for CO2:
   site_co2_positions <- sensor_positions(site_co2,"SCO2C","00095")
@@ -80,14 +83,14 @@ compute_neon_flux <- function(input_file_name) {
              finalQF = staPresFinalQF) %>%
       filter(finalQF == 0) %>%
       select(-finalQF) %>%
-      group_by(startDateTime) %>%
-      nest()
+      group_by(startDateTime)# %>%
+#      nest()
 
     # Then we will want to join the times where the pressure is - for ease of use it will be at all the depths using some of the joining and pivoting skills here.
 
     site_depth_nest <- site_interp %>% pivot_wider(names_from = "measurement",values_from = "value") %>%
       inner_join(pressure,b=c("startDateTime")) %>%
-      unnest(cols=c("data")) %>%
+      #unnest(cols=c("data")) %>%
       select(-measurement) %>%
       rename(pressure=value) %>%
       pivot_longer(cols=c("pressure","co2","temperature","soil_water"),
